@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <title>Meal app</title>
+    <style>
+        .pn-ProductNav_Wrapper {
+  position: relative;
+  padding: 0 11px;
+}
+
+.pn-ProductNav {
+  /* Make this scrollable when needed */
+  overflow-x: auto;
+  /* We don't want vertical scrolling */
+  overflow-y: hidden;
+  /* For WebKit implementations, provide inertia scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* We don't want internal inline elements to wrap */
+  white-space: nowrap;
+  /* If JS present, let's hide the default scrollbar */
+  /* positioning context for advancers */
+  position: relative;
+}
+.js .pn-ProductNav {
+  /* Make an auto-hiding scroller for the 3 people using a IE */
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  /* Remove the default scrollbar for WebKit implementations */
+}
+.js .pn-ProductNav::-webkit-scrollbar {
+  display: none;
+}
+
+.pn-ProductNav_Contents {
+  float: left;
+  transition: transform 0.2s ease-in-out;
+}
+
+.pn-ProductNav_Contents-no-transition {
+  transition: none;
+}
+
+.pn-ProductNav_Link {
+  text-decoration: none;
+  color: #888;
+  font-size: 1.2em;
+  font-family: -apple-system, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.pn-ProductNav_Link + .pn-ProductNav_Link {
+  margin-left: 11px;
+  padding-left: 11px;
+  border-left: 1px solid #eee;
+}
+.pn-ProductNav_Link[aria-selected=true] {
+  color: #111;
+}
+
+.pn-Advancer {
+  /* Reset the button */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: transparent;
+  padding: 0;
+  border: 0;
+  /* Now style it as needed */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* Set the buttons invisible by default */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pn-Advancer:focus {
+  outline: 0;
+}
+.pn-Advancer:hover {
+  cursor: pointer;
+}
+
+.pn-Advancer_Left {
+  left: 0;
+}
+[data-overflowing=both] ~ .pn-Advancer_Left, [data-overflowing=left] ~ .pn-Advancer_Left {
+  opacity: 1;
+}
+
+.pn-Advancer_Right {
+  right: 0;
+}
+[data-overflowing=both] ~ .pn-Advancer_Right, [data-overflowing=right] ~ .pn-Advancer_Right {
+  opacity: 1;
+}
+
+.pn-Advancer_Icon {
+  width: 20px;
+  height: 44px;
+  fill: #bbb;
+}
+.title-app{
+            color: gray;
+        }
+        .btn{
+            
+            margin: 10px;
+             height: 150px;
+             box-shadow: 0px 0px 10px 1px rgb(49, 49, 49);
+             width: 100px;
+             transition: 0.4s;
+             background-color: rgb(255, 255, 255);
+             animation-name: example;
+   animation-duration: 1s;
+ 
+         }
+         .icon{
+            width: 50px;
+            height: 50px;
+            
+        }
+    </style>
+</head>
+<body>
+    <div id="error" style="position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%);">
+        <ion-text color="danger">An error</ion-text>
+        <br>
+        <ion-icon name="refresh-sharp" onclick="window.location.reload()" style="font-size: 50px;"></ion-icon>
+    </div>
+<ion-app id="app">
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>Meal app</ion-title>
+        </ion-toolbar>
+        <ion-toolbar>
+
+                <ion-icon slot="start" name="arrow-back-sharp" id="backSearch" style="display: none; font-size: 20px;" class="ion-margin"></ion-icon>
+                <ion-searchbar id="search" style="display: inline-block;" ></ion-searchbar>
+                <ion-icon  slot="end" name="search-sharp" style="font-size: 20px;" onclick="search()" class="ion-margin"></ion-icon>
+
+        </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      
+          <h2>Cathegories</h2>
+          <div class="pn-ProductNav_Wrapper">
+            <nav id="pnProductNav" class="pn-ProductNav">
+                <div id="pnProductNavContents" class="pn-ProductNav_Contents">
+                    <a href="beef.html"   class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/beef.png">
+                          </ion-avatar>
+                        </a>
+                    <a href="chicken.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/chicken.png">
+                          </ion-avatar>
+                        
+                        </a>
+                    <a href="lamb.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/lamb.png">
+                        </ion-avatar>
+                    </a>
+                    <a href="miscellaneous.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/miscellaneous.png">
+                        </ion-avatar>
+                    </a>
+                    <a href="pasta.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/pasta.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="seafood.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/seafood.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="side.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/side.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="starter.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/starter.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="vegan.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/vegan.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="vegetarian.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/vegetarian.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="breakfast.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/breakfast.png">
+                          </ion-avatar>
+                    </a>
+                    <a href="goat.html"  class="pn-ProductNav_Link">
+                        <ion-avatar class="ion-margin-start">
+                            <img src="https://www.themealdb.com/images/category/goat.png">
+                          </ion-avatar>
+                    </a>  
+                    
+                    
+                </div>
+              
+            </nav>
+              <button id="pnAdvancerLeft" class="pn-Advancer pn-Advancer_Left" type="button">
+                <svg class="pn-Advancer_Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 551 1024"><path d="M445.44 38.183L-2.53 512l447.97 473.817 85.857-81.173-409.6-433.23v81.172l409.6-433.23L445.44 38.18z"/></svg>
+              </button>
+              <button id="pnAdvancerRight" class="pn-Advancer pn-Advancer_Right" type="button">
+                <svg class="pn-Advancer_Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 551 1024"><path d="M105.56 985.817L553.53 512 105.56 38.183l-85.857 81.173 409.6 433.23v-81.172l-409.6 433.23 85.856 81.174z"/></svg>
+              </button>
+            </div>
+
+
+          <br>
+        <div id="main"></div>
+        <div id="detail"></div>
+    </ion-content>
+</ion-app>
+
+<script>
+    var SETTINGS = {
+navBarTravelling: false,
+navBarTravelDirection: "",
+navBarTravelDistance: 150
+}
+
+document.documentElement.classList.remove("no-js");
+document.documentElement.classList.add("js");
+
+// Out advancer buttons
+var pnAdvancerLeft = document.getElementById("pnAdvancerLeft");
+var pnAdvancerRight = document.getElementById("pnAdvancerRight");
+
+var pnProductNav = document.getElementById("pnProductNav");
+var pnProductNavContents = document.getElementById("pnProductNavContents");
+
+pnProductNav.setAttribute("data-overflowing", determineOverflow(pnProductNavContents, pnProductNav));
+
+// Handle the scroll of the horizontal container
+var last_known_scroll_position = 0;
+var ticking = false;
+
+function doSomething(scroll_pos) {
+pnProductNav.setAttribute("data-overflowing", determineOverflow(pnProductNavContents, pnProductNav));
+}
+
+pnProductNav.addEventListener("scroll", function() {
+last_known_scroll_position = window.scrollY;
+if (!ticking) {
+window.requestAnimationFrame(function() {
+    doSomething(last_known_scroll_position);
+    ticking = false;
+});
+}
+ticking = true;
+});
+
+
+pnAdvancerLeft.addEventListener("click", function() {
+// If in the middle of a move return
+if (SETTINGS.navBarTravelling === true) {
+return;
+}
+// If we have content overflowing both sides or on the left
+if (determineOverflow(pnProductNavContents, pnProductNav) === "left" || determineOverflow(pnProductNavContents, pnProductNav) === "both") {
+// Find how far this panel has been scrolled
+var availableScrollLeft = pnProductNav.scrollLeft;
+// If the space available is less than two lots of our desired distance, just move the whole amount
+// otherwise, move by the amount in the settings
+if (availableScrollLeft < SETTINGS.navBarTravelDistance * 2) {
+    pnProductNavContents.style.transform = "translateX(" + availableScrollLeft + "px)";
+} else {
+    pnProductNavContents.style.transform = "translateX(" + SETTINGS.navBarTravelDistance + "px)";
+}
+// We do want a transition (this is set in CSS) when moving so remove the class that would prevent that
+pnProductNavContents.classList.remove("pn-ProductNav_Contents-no-transition");
+// Update our settings
+SETTINGS.navBarTravelDirection = "left";
+SETTINGS.navBarTravelling = true;
+}
+// Now update the attribute in the DOM
+pnProductNav.setAttribute("data-overflowing", determineOverflow(pnProductNavContents, pnProductNav));
+});
+
+pnAdvancerRight.addEventListener("click", function() {
+// If in the middle of a move return
+if (SETTINGS.navBarTravelling === true) {
+return;
+}
+// If we have content overflowing both sides or on the right
+if (determineOverflow(pnProductNavContents, pnProductNav) === "right" || determineOverflow(pnProductNavContents, pnProductNav) === "both") {
+// Get the right edge of the container and content
+var navBarRightEdge = pnProductNavContents.getBoundingClientRect().right;
+var navBarScrollerRightEdge = pnProductNav.getBoundingClientRect().right;
+// Now we know how much space we have available to scroll
+var availableScrollRight = Math.floor(navBarRightEdge - navBarScrollerRightEdge);
+// If the space available is less than two lots of our desired distance, just move the whole amount
+// otherwise, move by the amount in the settings
+if (availableScrollRight < SETTINGS.navBarTravelDistance * 2) {
+    pnProductNavContents.style.transform = "translateX(-" + availableScrollRight + "px)";
+} else {
+    pnProductNavContents.style.transform = "translateX(-" + SETTINGS.navBarTravelDistance + "px)";
+}
+// We do want a transition (this is set in CSS) when moving so remove the class that would prevent that
+pnProductNavContents.classList.remove("pn-ProductNav_Contents-no-transition");
+// Update our settings
+SETTINGS.navBarTravelDirection = "right";
+SETTINGS.navBarTravelling = true;
+}
+// Now update the attribute in the DOM
+pnProductNav.setAttribute("data-overflowing", determineOverflow(pnProductNavContents, pnProductNav));
+});
+
+pnProductNavContents.addEventListener(
+"transitionend",
+function() {
+// get the value of the transform, apply that to the current scroll position (so get the scroll pos first) and then remove the transform
+var styleOfTransform = window.getComputedStyle(pnProductNavContents, null);
+var tr = styleOfTransform.getPropertyValue("-webkit-transform") || styleOfTransform.getPropertyValue("transform");
+// If there is no transition we want to default to 0 and not null
+var amount = Math.abs(parseInt(tr.split(",")[4]) || 0);
+pnProductNavContents.style.transform = "none";
+pnProductNavContents.classList.add("pn-ProductNav_Contents-no-transition");
+// Now lets set the scroll position
+if (SETTINGS.navBarTravelDirection === "left") {
+    pnProductNav.scrollLeft = pnProductNav.scrollLeft - amount;
+} else {
+    pnProductNav.scrollLeft = pnProductNav.scrollLeft + amount;
+}
+SETTINGS.navBarTravelling = false;
+},
+false
+);
+
+// Handle setting the currently active link
+pnProductNavContents.addEventListener("click", function(e) {
+var links = [].slice.call(document.querySelectorAll(".pn-ProductNav_Link"));
+links.forEach(function(item) {
+item.setAttribute("aria-selected", "false");
+})
+e.target.setAttribute("aria-selected", "true");
+})
+
+function determineOverflow(content, container) {
+var containerMetrics = container.getBoundingClientRect();
+var containerMetricsRight = Math.floor(containerMetrics.right);
+var containerMetricsLeft = Math.floor(containerMetrics.left);
+var contentMetrics = content.getBoundingClientRect();
+var contentMetricsRight = Math.floor(contentMetrics.right);
+var contentMetricsLeft = Math.floor(contentMetrics.left);
+if (containerMetricsLeft > contentMetricsLeft && containerMetricsRight < contentMetricsRight) {
+return "both";
+} else if (contentMetricsLeft < containerMetricsLeft) {
+return "left";
+} else if (contentMetricsRight > containerMetricsRight) {
+return "right";
+} else {
+return "none";
+}
+}
+</script>
+    <script src="script.js"></script>
+</body>
+</html>
